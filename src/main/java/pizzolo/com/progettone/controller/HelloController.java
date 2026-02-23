@@ -30,6 +30,11 @@ public class HelloController {
         fd.setToX(88);
         fd.setToY(120);
         fd.setInterpolator(Interpolator.LINEAR);
+        FadeTransition op = new FadeTransition(Duration.seconds(3), cr);
+        op.setFromValue(1.0);
+        op.setToValue(0.0);
+        op.setCycleCount(1);
+        op.play();
         fd.play();
     }
 }
