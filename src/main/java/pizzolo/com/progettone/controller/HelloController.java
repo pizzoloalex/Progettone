@@ -39,30 +39,52 @@ public class HelloController {
         schermo.setFocusTraversable(true);
         schermo.requestFocus();
         schermo.setOnKeyPressed(this::muoviMacchina);
+
+        // Immagine strada
+        Image strada = new Image(getClass().getResource("/pizzolo/com/progettone/images/partenza.png").toExternalForm());
+        mappa.setFitHeight(800);
+        mappa.setFitWidth(800);
+        mappa.setPreserveRatio(true);
+        mappa.setImage(strada);
+
+        //continuo macchina
+
+
+        // Immagine macchina
         Image img = new Image(getClass().getResource("/pizzolo/com/progettone/images/macchina.png").toExternalForm());
         macchina.setImage(img);
-        macchina.setFitWidth(200);
-        macchina.setFitHeight(200);
+        macchina.setFitWidth(100);
+        macchina.setFitHeight(100);
+
+        // Posiziona la macchina sopra la strada
+        macchina.setLayoutX(mappa.getLayoutX() + mappa.getFitWidth() / 2 - macchina.getFitWidth() / 2);
+        macchina.setLayoutY(mappa.getLayoutY() + mappa.getFitHeight() / 2 - macchina.getFitHeight() / 2);
     }
+
 
     /**
      * muuove l'immagine della macchina di tot step con i tasti
+     *
      * @param event
      */
     public void muoviMacchina(KeyEvent event) {
         double step = 10;
+        TranslateTransition tr = new TranslateTransition(Duration.millis(0.1), mappa);
         if (event.getCode() == KeyCode.W) {
-            macchina.setLayoutY(macchina.getLayoutY() - step);
+            tr.setByY(step);
         }
-            if (event.getCode() == KeyCode.S) {
-                macchina.setLayoutY(macchina.getLayoutY() + step);
-            }
-            if (event.getCode() == KeyCode.A) {
-                macchina.setLayoutX(macchina.getLayoutX() - step);
-            }
-            if (event.getCode() == KeyCode.D) {
-                macchina.setLayoutX(macchina.getLayoutX() + step);
-            }
+        if (event.getCode() == KeyCode.S) {
+            tr.setByY(-step);
+        }
+        if (event.getCode() == KeyCode.A) {
+            //TODO calcolare le curve
+            tr.setByX(-step);
+        }
+        if (event.getCode() == KeyCode.D) {
+            //TODO calcolare le curve
+            tr.setByX(step);
+        }
+        tr.play();
 
 
     }
