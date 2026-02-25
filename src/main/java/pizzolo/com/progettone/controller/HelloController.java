@@ -1,7 +1,5 @@
 package pizzolo.com.progettone.controller;
 
-import javafx.animation.Animation;
-import javafx.animation.FadeTransition;
 import javafx.animation.TranslateTransition;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
@@ -12,10 +10,9 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Pane;
 import javafx.util.Duration;
+import pizzolo.com.progettone.model.ImmaginiStrada;
 
-import java.awt.*;
-import java.security.Key;
-import java.util.jar.JarOutputStream;
+import java.util.ArrayList;
 
 /**
  * la mappa si muove e si aggiorna ad ogni movimento della macchina
@@ -34,20 +31,38 @@ public class HelloController {
     @FXML
     private Pane schermo;//schermo di tutto il gioco
 
-
     public void initialize() {
         schermo.setFocusTraversable(true);
         schermo.requestFocus();
         schermo.setOnKeyPressed(this::muoviMacchina);
 
         // Immagine strada
-        Image strada = new Image(getClass().getResource("/pizzolo/com/progettone/images/partenza.png").toExternalForm());
-        mappa.setFitHeight(800);
-        mappa.setFitWidth(800);
+        Image strada = new Image(getClass().getResource("/pizzolo/com/progettone/images/continuo_strada.png").toExternalForm());
+        mappa.setFitHeight(500);
+        mappa.setFitWidth(500);
         mappa.setPreserveRatio(true);
         mappa.setImage(strada);
 
-        //continuo macchina
+        //continuo strada
+        Image continuoStrada = new Image(
+                getClass().getResource("/pizzolo/com/progettone/images/continuo_strada.png").toExternalForm()
+        );
+
+        double tileHeight = 500; // l’altezza che vuoi visualizzare
+
+        for (int i = 0; i < 4; i++) {
+            ImageView tile = new ImageView(continuoStrada);
+
+            tile.setFitWidth(500);
+            tile.setFitHeight(tileHeight);
+
+            tile.setLayoutX(0);
+            tile.setLayoutY(i * tileHeight);
+
+            schermo.getChildren().add(tile);
+        }
+
+
 
 
         // Immagine macchina
@@ -69,7 +84,8 @@ public class HelloController {
      */
     public void muoviMacchina(KeyEvent event) {
         double step = 10;
-        TranslateTransition tr = new TranslateTransition(Duration.millis(0.1), mappa);
+        TranslateTransition tr = new TranslateTransition(Duration.millis(10), schermo);
+
         if (event.getCode() == KeyCode.W) {
             tr.setByY(step);
         }
