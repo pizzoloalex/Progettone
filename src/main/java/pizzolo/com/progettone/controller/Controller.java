@@ -4,6 +4,7 @@ import javafx.fxml.FXML;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import pizzolo.com.progettone.model.Mappa;
@@ -18,8 +19,8 @@ public class Controller {
     private VBox vBox;
     @FXML
     private StackPane schermo;//mostra tutto il gioco
-//    @FXML
-//    private VBox mappa;//mostra la mappa
+    @FXML
+    private Pane mappa;//mostra la mappa
     @FXML
     private ImageView macchina;//mostra la macchina
 
@@ -33,7 +34,15 @@ public class Controller {
     public void initialize() {
         img_1 = new Mappa(0, "/pizzolo/com/progettone/images/continuo_strada.png");
         img_2 = new Mappa(1, "/pizzolo/com/progettone/images/continuo_strada.png");
-        schermo.getChildren().addAll(img_1.getView(), img_2.getView());
+        //posiziona le immagini una sotto l'altra
+        img_1.getView().setLayoutY(0);
+        img_2.getView().setLayoutY(-img_1.getView().getFitHeight()); // altezza della tua immagine
+        //posiziona al centro
+        double centro = (mappa.getPrefHeight() - img_1.getView().getFitWidth()) / 2;
+        img_1.getView().setLayoutX(centro);
+        img_2.getView().setLayoutX(centro);
+        mappa.getChildren().addAll(img_1.getView(), img_2.getView());
+
 
         //aspetta che la scena sia carica
         schermo.sceneProperty().addListener((obs, oldScene, newScene) -> {
@@ -47,8 +56,8 @@ public class Controller {
         double step = 10;
 //        System.out.println("Premuto" + event.getCode());
         if (event.getCode() == KeyCode.W) {
-            img_1.getView().setLayoutY(img_1.getView().getLayoutY() - step);
-            img_2.getView().setLayoutY(img_2.getView().getLayoutY() - step);
+            img_1.getView().setLayoutY(img_1.getView().getLayoutY() + step);
+            img_2.getView().setLayoutY(img_2.getView().getLayoutY() + step);
         }
     }
 
