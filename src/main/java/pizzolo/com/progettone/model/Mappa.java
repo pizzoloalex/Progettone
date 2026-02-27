@@ -27,8 +27,10 @@ public class Mappa {
         }else{
             this.strada = new Image(getClass().getResource(url).toExternalForm());
             this.view = new ImageView(this.strada);
-            this.view.setFitHeight(400);
+            //TODO sistemare dimensioni delle immagini che sia automatica
+            this.view.setFitHeight(600);
             this.view.setFitWidth(200);
+            this.view.setPreserveRatio(false);
         }
     }
 
