@@ -4,15 +4,14 @@
 <?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
 
-<VBox fx:id="vBox" alignment="CENTER" prefHeight="600.0" prefWidth="1023.0" spacing="0.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pizzolo.com.progettone.controller.HelloController">
+<VBox fx:id="vBox" alignment="CENTER" prefHeight="600.0" prefWidth="1023.0" spacing="0.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pizzolo.com.progettone.controller.Controller">
     <padding>
         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
     </padding>
    <children>
       <StackPane fx:id="schermo" prefHeight="586.0" prefWidth="1028.0">
          <children>
-             <VBox fx:id="mappa" alignment="CENTER" layoutY="4.0" prefHeight="560.0" prefWidth="997.0" spacing="0.0"></VBox>
-                  <ImageView fx:id="macchina" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true"/>
+                  <ImageView fx:id="macchina" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" />
          </children>
       </StackPane>
    </children>
