@@ -11,6 +11,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.util.Duration;
 import pizzolo.com.progettone.model.Mappa;
+import pizzolo.com.progettone.model.Movimento;
 
 /**
  * la mappa si muove e si aggiorna ad ogni movimento della macchina
@@ -32,6 +33,8 @@ public class Controller {
     private Mappa img_2;
     private Mappa img_3;
     private Mappa img_4;
+    //variabile del movimento
+    private Movimento move;
 
     /**
      * crea le immagini iniziali
@@ -56,6 +59,8 @@ public class Controller {
         img_4.getView().setLayoutX(centro);
         mappa.getChildren().addAll(img_1.getView(), img_2.getView(), img_3.getView(), img_4.getView());
 
+        Mappa[] immagini = {img_1, img_2, img_3, img_4};
+        move = new Movimento(mappa, immagini);
 
         //aspetta che la scena sia carica
         schermo.sceneProperty().addListener((obs, oldScene, newScene) -> {
@@ -74,58 +79,21 @@ public class Controller {
      * @param event input della tastiera
      */
     public void movimento(KeyEvent event) {
-        double step = 30;//velocita con cui si muove
-        ImageView immaggine1 = img_1.getView();
-        ImageView immaggine2 = img_2.getView();
-        ImageView immaggine3 = img_3.getView();
-        ImageView immaggine4 = img_4.getView();
-        switch (event.getCode()) {
+        move.accelera();
+        switch (event.getCode()){
             case W, UP:
-                //simulazione macchina avanti
-                TranslateTransition tr = new TranslateTransition(Duration.millis(100), mappa);
-                tr.setByY(step);
-                tr.setCycleCount(Animation.INDEFINITE);
-                tr.play();
-                loopInfinito();
+                move.start();
                 break;
-         /*   case S, DOWN:
-                //simulazione macchina indietro (rallentamento)
-                step = 15;
-                immaggine1.setLayoutY(immaggine1.getLayoutY() - step);
-                immaggine2.setLayoutY(immaggine2.getLayoutY() - step);
-                immaggine3.setLayoutY(immaggine3.getLayoutY() - step);
-                immaggine4.setLayoutY(immaggine4.getLayoutY() - step);
-                loopInfinito();
-                break;
-                */
             case A, LEFT:
-                immaggine1.setLayoutX(immaggine1.getLayoutX() - step);
-                immaggine2.setLayoutX(immaggine2.getLayoutX() - step);
-                immaggine3.setLayoutX(immaggine3.getLayoutX() - step);
-                immaggine4.setLayoutX(immaggine4.getLayoutX() - step);
+                move.turnLeft();
                 break;
             case D, RIGHT:
-                immaggine1.setLayoutX(immaggine1.getLayoutX() + step);
-                immaggine2.setLayoutX(immaggine2.getLayoutX() + step);
-                immaggine3.setLayoutX(immaggine3.getLayoutX() + step);
-                immaggine4.setLayoutX(immaggine4.getLayoutX() + step);
+                move.turnRight();
                 break;
-            default:
-                System.out.println("Input non valido");
         }
     }
 
-    /**
-     * ogni volta che la strada esce dallo schermo ricompare dal alto
-     */
-    private void loopInfinito() {
-        double altezzaMappa = mappa.getHeight();
-        double y = mappa.getTranslateY();//traslazione verticale della strada
 
-        if (y > altezzaMappa) {
-            mappa.setTranslateY(0);
-        }
-    }
 
 
 }
