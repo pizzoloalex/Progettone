@@ -1,5 +1,7 @@
 package pizzolo.com.progettone.controller;
 
+import javafx.animation.Animation;
+import javafx.animation.TranslateTransition;
 import javafx.fxml.FXML;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
@@ -7,6 +9,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.util.Duration;
 import pizzolo.com.progettone.model.Mappa;
 
 /**
@@ -63,9 +66,8 @@ public class Controller {
     }
 
     /**
-     * movimento della strada per simulare movimento della macchina
-     * W = avanti
-     * S = indietro
+     * movimento della strada per simulare movimento della macchina con animazione
+     * W = avanti, una volta partito non si ferma, tranne allo scontro
      * A = sinstra
      * D = destra
      *
@@ -80,13 +82,13 @@ public class Controller {
         switch (event.getCode()) {
             case W, UP:
                 //simulazione macchina avanti
-                immaggine1.setLayoutY(immaggine1.getLayoutY() + step);
-                immaggine2.setLayoutY(immaggine2.getLayoutY() + step);
-                immaggine3.setLayoutY(immaggine3.getLayoutY() + step);
-                immaggine4.setLayoutY(immaggine4.getLayoutY() + step);
+                TranslateTransition tr = new TranslateTransition(Duration.millis(100), mappa);
+                tr.setByY(step);
+                tr.setCycleCount(Animation.INDEFINITE);
+                tr.play();
                 loopInfinito();
                 break;
-            case S, DOWN:
+         /*   case S, DOWN:
                 //simulazione macchina indietro (rallentamento)
                 step = 15;
                 immaggine1.setLayoutY(immaggine1.getLayoutY() - step);
@@ -95,6 +97,7 @@ public class Controller {
                 immaggine4.setLayoutY(immaggine4.getLayoutY() - step);
                 loopInfinito();
                 break;
+                */
             case A, LEFT:
                 immaggine1.setLayoutX(immaggine1.getLayoutX() - step);
                 immaggine2.setLayoutX(immaggine2.getLayoutX() - step);
@@ -116,25 +119,11 @@ public class Controller {
      * ogni volta che la strada esce dallo schermo ricompare dal alto
      */
     private void loopInfinito() {
-        double altezzaMappa = mappa.getHeight();//altezza della mappa
-        //altezza delle immagini
-        double altezzaImmagine1 = img_1.getView().getLayoutY();
-        double altezzaImmagine2 = img_2.getView().getLayoutY();
-        double altezzaImmagine3 = img_3.getView().getLayoutY();
-        double altezzaImmagine4 = img_4.getView().getLayoutY();
-        double altezza = img_1.getView().getFitHeight(); //altezza del immagine da reimpostare
+        double altezzaMappa = mappa.getHeight();
+        double y = mappa.getTranslateY();//traslazione verticale della strada
 
-        if (altezzaImmagine1 > altezzaMappa) {
-            img_1.getView().setLayoutY(-altezza);
-        }
-        if (altezzaImmagine2 > altezzaMappa) {
-            img_2.getView().setLayoutY(-altezza);
-        }
-        if (altezzaImmagine3 > altezzaMappa) {
-            img_3.getView().setLayoutY(-altezza);
-        }
-        if (altezzaImmagine4 > altezzaMappa) {
-            img_4.getView().setLayoutY(-altezza);
+        if (y > altezzaMappa) {
+            mappa.setTranslateY(0);
         }
     }
 
