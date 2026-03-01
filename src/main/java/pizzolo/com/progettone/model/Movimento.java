@@ -4,6 +4,8 @@ import javafx.animation.Animation;
 import javafx.animation.AnimationTimer;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.util.Duration;
 
@@ -16,11 +18,13 @@ public class Movimento extends AnimationTimer {
     private double speed = 10;
     private final Pane mappa;
     private Mappa[] immagini;
-    private Timeline accelerazione; //accelerazione per la macchina
+    private Timeline accelerazione;//accelerazione per la macchina
+    private ImageView macchina;
 
-    public Movimento(Pane mappa, Mappa[] immagini) {
+    public Movimento(Pane mappa, Mappa[] immagini, ImageView macchina) {
         this.mappa = mappa;
         this.immagini = immagini;
+        this.macchina = macchina;
     }
 
     /**
@@ -44,25 +48,34 @@ public class Movimento extends AnimationTimer {
      * ogni 15 secondi la velocita aumenta
      */
     public void accelera() {
-        accelerazione = new Timeline(new KeyFrame(Duration.seconds(3), actionEvent -> this.speed += 10));
+        accelerazione = new Timeline(new KeyFrame(Duration.seconds(30), actionEvent -> this.speed++));
         accelerazione.setCycleCount(Animation.INDEFINITE);
         accelerazione.play();
     }
 
     /**
-     * sposta la mappa a destra
-     * simula la macchina che si sposta a destra
+     * sposta la macchina a destra
      */
     public void turnRight() {
-        mappa.setLayoutX(mappa.getLayoutX() + speed);
+        double nuovaPosX = macchina.getLayoutX() + speed;//calcolo prima la nuova posizione
+        double limite = mappa.getWidth() - macchina.getFitWidth();//ultima posizione possibile della X per la macchina
+        //gestiso il limite
+        if (nuovaPosX > limite){
+            nuovaPosX = limite;
+        }
+        macchina.setLayoutX(nuovaPosX);
     }
 
     /**
-     * sposta la mappa a sinistra
-     * simula la macchina che si sposta a sinistra
+     * sposta la macchina a sinistra
      */
     public void turnLeft() {
-        mappa.setLayoutX(mappa.getLayoutX() - speed);
+        //TODO
+        double nuovaPosX = macchina.getLayoutX() - speed;
+        if (nuovaPosX < 0){
+            nuovaPosX = 0;
+        }
+        macchina.setLayoutX(nuovaPosX);
     }
 
 
