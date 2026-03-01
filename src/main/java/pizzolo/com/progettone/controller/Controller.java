@@ -3,6 +3,7 @@ package pizzolo.com.progettone.controller;
 import javafx.animation.Animation;
 import javafx.animation.TranslateTransition;
 import javafx.fxml.FXML;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -40,6 +41,7 @@ public class Controller {
      * crea le immagini iniziali
      */
     public void initialize() {
+        //creazione delle immagini iniziali
         img_1 = new Mappa(0, "/pizzolo/com/progettone/images/continuo_strada.png");
         img_2 = new Mappa(1, "/pizzolo/com/progettone/images/continuo_strada.png");
         img_3 = new Mappa(2, "/pizzolo/com/progettone/images/continuo_strada.png");
@@ -57,10 +59,18 @@ public class Controller {
         img_2.getView().setLayoutX(centro);
         img_3.getView().setLayoutX(centro);
         img_4.getView().setLayoutX(centro);
+
         mappa.getChildren().addAll(img_1.getView(), img_2.getView(), img_3.getView(), img_4.getView());
 
+        //inserisco macchina
+        Image img_macchina = new Image(getClass().getResource("/pizzolo/com/progettone/images/macchina.png").toExternalForm());
+        macchina.setImage(img_macchina);
+        double centroMacchina = (mappa.getPrefWidth() - macchina.getFitWidth()) / 2;
+        macchina.setLayoutX(centroMacchina);
+        macchina.setLayoutY(mappa.getPrefHeight() - macchina.getFitHeight() - 20);
+
         Mappa[] immagini = {img_1, img_2, img_3, img_4};
-        move = new Movimento(mappa, immagini);
+        move = new Movimento(mappa, immagini, macchina);
 
         //aspetta che la scena sia carica
         schermo.sceneProperty().addListener((obs, oldScene, newScene) -> {
@@ -79,9 +89,13 @@ public class Controller {
      * @param event input della tastiera
      */
     public void movimento(KeyEvent event) {
-        move.accelera();
+        boolean click = false;
         switch (event.getCode()){
             case W, UP:
+                if (!click){
+                    move.accelera();
+                    click = true;
+                }
                 move.start();
                 break;
             case A, LEFT:
@@ -89,6 +103,7 @@ public class Controller {
                 break;
             case D, RIGHT:
                 move.turnRight();
+//                System.out.println("premuto");
                 break;
         }
     }
