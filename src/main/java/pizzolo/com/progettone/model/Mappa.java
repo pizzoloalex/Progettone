@@ -5,7 +5,9 @@ import javafx.scene.image.ImageView;
 
 import java.lang.reflect.InvocationTargetException;
 
-
+/**
+ * gestione della mappa: ostacoli, fuori pista etc
+ */
 public class Mappa {
     private int id;
     private Image strada;
@@ -28,8 +30,8 @@ public class Mappa {
             this.strada = new Image(getClass().getResource(url).toExternalForm());
             this.view = new ImageView(this.strada);
             //TODO sistemare dimensioni delle immagini che sia automatica
-            this.view.setFitHeight(600);
-            this.view.setFitWidth(200);
+            this.view.setFitHeight(700);
+            this.view.setFitWidth(225);
             this.view.setPreserveRatio(false);
         }
     }

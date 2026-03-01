@@ -72,6 +72,7 @@ public class Controller {
         Mappa[] immagini = {img_1, img_2, img_3, img_4};
         move = new Movimento(mappa, immagini, macchina);
 
+
         //aspetta che la scena sia carica
         schermo.sceneProperty().addListener((obs, oldScene, newScene) -> {
             if (newScene != null) {
