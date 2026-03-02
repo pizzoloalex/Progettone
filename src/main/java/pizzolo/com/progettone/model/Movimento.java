@@ -8,6 +8,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.util.Duration;
+import pizzolo.com.progettone.controller.Controller;
 
 /**
  * gestisce i movimenti della macchina
@@ -20,11 +21,13 @@ public class Movimento extends AnimationTimer {
     private Mappa[] immagini;
     private Timeline accelerazione;//accelerazione per la macchina
     private ImageView macchina;
+    private Controller controller;
 
-    public Movimento(Pane mappa, Mappa[] immagini, ImageView macchina) {
+    public Movimento(Pane mappa, Mappa[] immagini, ImageView macchina, Controller controller) {
         this.mappa = mappa;
         this.immagini = immagini;
         this.macchina = macchina;
+        this.controller = controller;
     }
 
     /**
@@ -42,21 +45,27 @@ public class Movimento extends AnimationTimer {
                 img.getView().setLayoutY(img.getView().getLayoutY() - img.getView().getFitHeight() * immagini.length);
             }
         }
+
+        //movimento continuo e fluido
+        if (controller.isLeftPressed()) turnLeft();
+        if (controller.isRightPressed()) turnRight();
     }
 
     /**
      * ogni 15 secondi la velocita aumenta
      */
     public void accelera() {
-        accelerazione = new Timeline(new KeyFrame(Duration.seconds(30), actionEvent -> this.speed++));
+        accelerazione = new Timeline(new KeyFrame(Duration.seconds(15), actionEvent -> this.speed+= 5 ));
         accelerazione.setCycleCount(Animation.INDEFINITE);
         accelerazione.play();
     }
 
     /**
      * sposta la macchina a destra
+     * calcolando la posizione iniziale
      */
-    public void turnRight() {
+    private void turnRight() {
+        double speed = 5;
         double nuovaPosX = macchina.getLayoutX() + speed;//calcolo prima la nuova posizione
         double limite = mappa.getWidth() - macchina.getFitWidth();//ultima posizione possibile della X per la macchina
         //gestiso il limite
@@ -69,8 +78,8 @@ public class Movimento extends AnimationTimer {
     /**
      * sposta la macchina a sinistra
      */
-    public void turnLeft() {
-        //TODO
+    private void turnLeft() {
+        double speed = 5;
         double nuovaPosX = macchina.getLayoutX() - speed;
         if (nuovaPosX < 0){
             nuovaPosX = 0;
