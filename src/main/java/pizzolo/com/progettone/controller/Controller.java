@@ -36,6 +36,22 @@ public class Controller {
     private Mappa img_4;
     //variabile del movimento
     private Movimento move;
+    //variabili per la gestione dei click
+    private boolean leftPressed = false;
+    private boolean rightPressed = false;
+    private boolean upPressed = false;
+
+    public boolean isRightPressed() {
+        return rightPressed;
+    }
+
+    public boolean isLeftPressed() {
+        return leftPressed;
+    }
+
+    public boolean isUpPressed() {
+        return upPressed;
+    }
 
     /**
      * crea le immagini iniziali
@@ -47,7 +63,6 @@ public class Controller {
         img_3 = new Mappa(2, "/pizzolo/com/progettone/images/continuo_strada.png");
         img_4 = new Mappa(3, "/pizzolo/com/progettone/images/continuo_strada.png");
 
-        //TODO calcolare meglio il posizionamento delle immagini
         //posiziona le immagini una sotto l'altra
         img_1.getView().setLayoutY(0);
         img_2.getView().setLayoutY(-img_1.getView().getFitHeight());
@@ -61,6 +76,7 @@ public class Controller {
         img_4.getView().setLayoutX(centro);
 
         mappa.getChildren().addAll(img_1.getView(), img_2.getView(), img_3.getView(), img_4.getView());
+        macchina.toFront();
 
         //inserisco macchina
         Image img_macchina = new Image(getClass().getResource("/pizzolo/com/progettone/images/macchina.png").toExternalForm());
@@ -70,13 +86,14 @@ public class Controller {
         macchina.setLayoutY(mappa.getPrefHeight() - macchina.getFitHeight() - 20);
 
         Mappa[] immagini = {img_1, img_2, img_3, img_4};
-        move = new Movimento(mappa, immagini, macchina);
+        move = new Movimento(mappa, immagini, macchina, this);
 
 
         //aspetta che la scena sia carica
         schermo.sceneProperty().addListener((obs, oldScene, newScene) -> {
             if (newScene != null) {
-                newScene.setOnKeyPressed(this::movimento);
+                newScene.setOnKeyPressed(this::movimentoOnKeyPressed);
+                newScene.setOnKeyReleased(this::movimentoOnKeyRelased);
             }
         });
     }
@@ -89,27 +106,32 @@ public class Controller {
      *
      * @param event input della tastiera
      */
-    public void movimento(KeyEvent event) {
-        boolean click = false;
-        switch (event.getCode()){
-            case W, UP:
-                if (!click){
-                    move.accelera();
-                    click = true;
-                }
+    public void movimentoOnKeyPressed(KeyEvent event) {
+        switch (event.getCode()) {
+            case W, UP -> {
+                upPressed = true;
+                move.accelera();
                 move.start();
-                break;
-            case A, LEFT:
-                move.turnLeft();
-                break;
-            case D, RIGHT:
-                move.turnRight();
-//                System.out.println("premuto");
-                break;
+            }
+            case A, LEFT -> leftPressed = true;
+            case D, RIGHT -> rightPressed = true;
+            default -> System.out.println("Testo non valido!!");
         }
     }
 
-
+    /**
+     * gestisce il rilascio dei tasti
+     * @param event
+     */
+    public void movimentoOnKeyRelased(KeyEvent event) {
+        switch (event.getCode()) {
+            //gestione del click
+            case W, UP -> upPressed = false;
+            case A, LEFT -> leftPressed = false;
+            case D, RIGHT -> rightPressed = false;
+            default -> System.out.println("Tasto non valido!!");
+        }
+    }
 
 
 }
