@@ -22,13 +22,19 @@ public class Movimento extends AnimationTimer {
     private Timeline accelerazione;//accelerazione per la macchina
     private ImageView macchina;
     private Controller controller;
+//    boolean move;
 
     public Movimento(Pane mappa, Mappa[] immagini, ImageView macchina, Controller controller) {
         this.mappa = mappa;
         this.immagini = immagini;
         this.macchina = macchina;
         this.controller = controller;
+//        move = true;
     }
+//
+//    public void setMove(boolean move) {
+//        this.move = move;
+//    }
 
     /**
      * gestisce i movimenti della macchina ad ogni frame
@@ -46,6 +52,7 @@ public class Movimento extends AnimationTimer {
             }
         }
 
+//        if(!move) return;
         //movimento continuo e fluido
         if (controller.isLeftPressed()) turnLeft();
         if (controller.isRightPressed()) turnRight();
@@ -55,7 +62,7 @@ public class Movimento extends AnimationTimer {
      * ogni 15 secondi la velocita aumenta
      */
     public void accelera() {
-        accelerazione = new Timeline(new KeyFrame(Duration.seconds(15), actionEvent -> this.speed+= 5 ));
+        accelerazione = new Timeline(new KeyFrame(Duration.seconds(15), actionEvent -> this.speed += 3));
         accelerazione.setCycleCount(Animation.INDEFINITE);
         accelerazione.play();
     }
@@ -69,7 +76,7 @@ public class Movimento extends AnimationTimer {
         double nuovaPosX = macchina.getLayoutX() + speed;//calcolo prima la nuova posizione
         double limite = mappa.getWidth() - macchina.getFitWidth();//ultima posizione possibile della X per la macchina
         //gestiso il limite
-        if (nuovaPosX > limite){
+        if (nuovaPosX > limite) {
             nuovaPosX = limite;
         }
         macchina.setLayoutX(nuovaPosX);
@@ -80,8 +87,9 @@ public class Movimento extends AnimationTimer {
      */
     private void turnLeft() {
         double speed = 5;
+        if (macchina.getLayoutX()<300) return;
         double nuovaPosX = macchina.getLayoutX() - speed;
-        if (nuovaPosX < 0){
+        if (nuovaPosX < 0) {
             nuovaPosX = 0;
         }
         macchina.setLayoutX(nuovaPosX);

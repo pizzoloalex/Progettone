@@ -10,6 +10,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
 import pizzolo.com.progettone.model.Mappa;
 import pizzolo.com.progettone.model.Movimento;
@@ -18,6 +19,14 @@ import pizzolo.com.progettone.model.Movimento;
  * la mappa si muove e si aggiorna ad ogni movimento della macchina
  * la macchina sta ferma e fa gli effetti per far sembrare che si muove
  */
+
+
+
+
+//TODO gestire i limiti della strada con la creazione di rettangoli, cosi da gestire le collisioni
+//TODO scrivere meglio il codice
+
+
 
 public class Controller {
     @FXML
@@ -41,6 +50,10 @@ public class Controller {
     private boolean rightPressed = false;
     private boolean upPressed = false;
 
+    public Mappa getImg_1() {
+        return img_1;
+    }
+
     public boolean isRightPressed() {
         return rightPressed;
     }
@@ -52,6 +65,15 @@ public class Controller {
     public boolean isUpPressed() {
         return upPressed;
     }
+
+    double centro;
+
+
+//    Rectangle r;
+//
+//    Rectangle r2;
+
+
 
     /**
      * crea le immagini iniziali
@@ -69,7 +91,8 @@ public class Controller {
         img_3.getView().setLayoutY(img_2.getView().getLayoutY() - img_3.getView().getFitHeight());
         img_4.getView().setLayoutY(img_3.getView().getLayoutY() - img_4.getView().getFitHeight());
         //TODO trovare modo di scrivere meno immagini, ad esempio con ciclo for, ripetizione della stessa immagine
-        double centro = (mappa.getPrefWidth() - img_1.getView().getFitWidth()) / 2;
+
+        centro = (mappa.getPrefWidth() - img_1.getView().getFitWidth()) / 2;
         img_1.getView().setLayoutX(centro);
         img_2.getView().setLayoutX(centro);
         img_3.getView().setLayoutX(centro);
@@ -84,6 +107,10 @@ public class Controller {
         double centroMacchina = (mappa.getPrefWidth() - macchina.getFitWidth()) / 2;
         macchina.setLayoutX(centroMacchina);
         macchina.setLayoutY(mappa.getPrefHeight() - macchina.getFitHeight() - 20);
+
+//        double v = img_1.getView().getFitWidth();
+//        r = new Rectangle(centro-(v/2), 0, v, mappa.getHeight());
+//        r2 = new Rectangle(centroMacchina - (v/2), 0, macchina.getFitWidth(), macchina.getFitHeight());
 
         Mappa[] immagini = {img_1, img_2, img_3, img_4};
         move = new Movimento(mappa, immagini, macchina, this);
@@ -117,10 +144,12 @@ public class Controller {
             case D, RIGHT -> rightPressed = true;
             default -> System.out.println("Testo non valido!!");
         }
+//        move.setMove(collisioni());
     }
 
     /**
      * gestisce il rilascio dei tasti
+     *
      * @param event
      */
     public void movimentoOnKeyRelased(KeyEvent event) {
@@ -132,6 +161,10 @@ public class Controller {
             default -> System.out.println("Tasto non valido!!");
         }
     }
+
+//    public boolean collisioni(){
+//        return r.getBoundsInParent().intersects(r2.getBoundsInParent());
+//    }
 
 
 }
