@@ -38,7 +38,7 @@ public class Movimento extends AnimationTimer {
 
     /**
      * gestisce i movimenti della macchina ad ogni frame
-     *
+     * quando un immagine esce dal inquadraura (Pane) viene messa sotto
      * @param l
      */
     @Override
@@ -73,12 +73,10 @@ public class Movimento extends AnimationTimer {
      */
     private void turnRight() {
         double speed = 5;
-        double nuovaPosX = macchina.getLayoutX() + speed;//calcolo prima la nuova posizione
-        double limite = mappa.getWidth() - macchina.getFitWidth();//ultima posizione possibile della X per la macchina
-        //gestiso il limite
-        if (nuovaPosX > limite) {
-            nuovaPosX = limite;
-        }
+        double larghezzaReale = macchina.getBoundsInParent().getWidth();
+        double nuovaPosX = macchina.getLayoutX() + speed;
+        double limite = mappa.getPrefWidth() - larghezzaReale; // 225 - 150 = 75
+        if (nuovaPosX > limite) nuovaPosX = limite;
         macchina.setLayoutX(nuovaPosX);
     }
 
@@ -87,8 +85,7 @@ public class Movimento extends AnimationTimer {
      */
     private void turnLeft() {
         double speed = 5;
-        if (macchina.getLayoutX()<300) return;
-        double nuovaPosX = macchina.getLayoutX() - speed;
+        double nuovaPosX = macchina.getLayoutX() - speed;//ultima posizione possibile
         if (nuovaPosX < 0) {
             nuovaPosX = 0;
         }
