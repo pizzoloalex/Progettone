@@ -13,9 +13,9 @@
     <children>
         <StackPane fx:id="schermo" prefHeight="586.0" prefWidth="1028.0">
             <children>
-                <Pane fx:id="mappa" prefHeight="586.0" prefWidth="1028.0">
+                <Pane fx:id="mappa" prefHeight="586.0" prefWidth="225.0">
                     <children>
-                        <ImageView fx:id="macchina" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true"
+                        <ImageView fx:id="macchina" fitHeight="150.0" fitWidth="80.0" pickOnBounds="true"
                                    preserveRatio="true"/>
                     </children>
                 </Pane>

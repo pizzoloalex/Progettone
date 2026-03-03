@@ -50,9 +50,6 @@ public class Controller {
     private boolean rightPressed = false;
     private boolean upPressed = false;
 
-    public Mappa getImg_1() {
-        return img_1;
-    }
 
     public boolean isRightPressed() {
         return rightPressed;
@@ -77,6 +74,7 @@ public class Controller {
 
     /**
      * crea le immagini iniziali
+     * gestisce il layot delle immagini
      */
     public void initialize() {
         //creazione delle immagini iniziali
@@ -98,6 +96,8 @@ public class Controller {
         img_3.getView().setLayoutX(centro);
         img_4.getView().setLayoutX(centro);
 
+        //imposta la larghezza del pane quanto la larghezza del immagine
+        mappa.setPrefWidth(img_1.getView().getFitWidth());
         mappa.getChildren().addAll(img_1.getView(), img_2.getView(), img_3.getView(), img_4.getView());
         macchina.toFront();
 
@@ -130,7 +130,6 @@ public class Controller {
      * W = avanti, una volta partito non si ferma, tranne allo scontro
      * A = sinstra
      * D = destra
-     *
      * @param event input della tastiera
      */
     public void movimentoOnKeyPressed(KeyEvent event) {
@@ -149,8 +148,7 @@ public class Controller {
 
     /**
      * gestisce il rilascio dei tasti
-     *
-     * @param event
+     * @param event rilascio del tasto premuto
      */
     public void movimentoOnKeyRelased(KeyEvent event) {
         switch (event.getCode()) {
