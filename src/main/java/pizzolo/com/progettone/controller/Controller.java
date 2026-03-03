@@ -71,7 +71,7 @@ public class Controller {
 //    Rectangle r2;
 
 
-
+    //TODO pulire eventuale codice
     /**
      * crea le immagini iniziali
      * gestisce il layot delle immagini

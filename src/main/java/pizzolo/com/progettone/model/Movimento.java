@@ -14,6 +14,8 @@ import pizzolo.com.progettone.controller.Controller;
  * gestisce i movimenti della macchina
  */
 
+    //TODO gestire collisioni e limiti
+
 public class Movimento extends AnimationTimer {
 
     private double speed = 10;
