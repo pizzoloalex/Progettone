@@ -1,19 +1,17 @@
 package pizzolo.com.progettone.controller;
 
-import javafx.animation.Animation;
-import javafx.animation.TranslateTransition;
+
 import javafx.fxml.FXML;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.shape.Rectangle;
-import javafx.util.Duration;
 import pizzolo.com.progettone.model.Mappa;
 import pizzolo.com.progettone.model.Movimento;
+
+import java.util.Map;
 
 /**
  * la mappa si muove e si aggiorna ad ogni movimento della macchina
@@ -23,14 +21,14 @@ import pizzolo.com.progettone.model.Movimento;
 
 
 
-//TODO gestire i limiti della strada con la creazione di rettangoli, cosi da gestire le collisioni
+//TODO inserire immagine di collisione e aggiungerlo nel array
 //TODO scrivere meglio il codice
 
 
 
 public class Controller {
-    @FXML
-    private VBox vBox;
+//    @FXML
+//    private VBox vBox;
     @FXML
     private StackPane schermo;//mostra tutto il gioco
     @FXML
@@ -43,6 +41,7 @@ public class Controller {
     private Mappa img_2;
     private Mappa img_3;
     private Mappa img_4;
+    private Mappa collisione;
     //variabile del movimento
     private Movimento move;
     //variabili per la gestione dei click
@@ -66,7 +65,12 @@ public class Controller {
     double centro;
 
 
-
+    //TODO aggiungere al immagini alla strada per le collisioni
+    /*
+    per le collisioni inserisco l'immagine della collisione singola posizionando la macchine in determinate posizioni.
+    rimpicciolendo la macchina, mettendo piu immagini della stessa sequenza.
+    tagliare l.immagine e rimuovere lo sfondo
+     */
     //TODO pulire eventuale codice
     /**
      * crea le immagini iniziali
@@ -78,13 +82,13 @@ public class Controller {
         img_2 = new Mappa(1, "/pizzolo/com/progettone/images/continuo_strada.png");
         img_3 = new Mappa(2, "/pizzolo/com/progettone/images/continuo_strada.png");
         img_4 = new Mappa(3, "/pizzolo/com/progettone/images/continuo_strada.png");
+        collisione = new Mappa(4,"/pizzolo/com/progettone/images/collisione_macchina.jpg");
 
         //posiziona le immagini una sotto l'altra
         img_1.getView().setLayoutY(0);
         img_2.getView().setLayoutY(-img_1.getView().getFitHeight());
         img_3.getView().setLayoutY(img_2.getView().getLayoutY() - img_3.getView().getFitHeight());
         img_4.getView().setLayoutY(img_3.getView().getLayoutY() - img_4.getView().getFitHeight());
-        //TODO trovare modo di scrivere meno immagini, ad esempio con ciclo for, ripetizione della stessa immagine
 
         centro = (mappa.getPrefWidth() - img_1.getView().getFitWidth()) / 2;
         img_1.getView().setLayoutX(centro);

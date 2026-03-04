@@ -16,11 +16,11 @@ import pizzolo.com.progettone.controller.Controller;
  * gestisce i movimenti della macchina
  */
 
-    //TODO gestire collisioni e limiti
+    //TODO gestire collisioni
 
 public class Movimento extends AnimationTimer {
 
-    private double speed = 10;
+    private double speed = 6;
     private final Pane mappa;
     private Mappa[] immagini;
     private Timeline accelerazione;//accelerazione per la macchina
@@ -66,7 +66,7 @@ public class Movimento extends AnimationTimer {
      * ogni 15 secondi la velocita aumenta
      */
     public void accelera() {
-        accelerazione = new Timeline(new KeyFrame(Duration.seconds(15), actionEvent -> this.speed += 3));
+        accelerazione = new Timeline(new KeyFrame(Duration.seconds(15), actionEvent -> this.speed++));
         accelerazione.setCycleCount(Animation.INDEFINITE);
         accelerazione.play();
     }
@@ -79,7 +79,7 @@ public class Movimento extends AnimationTimer {
         double speed = 5;
         double larghezzaReale = macchina.getBoundsInParent().getWidth();
 //        System.out.println(macchina.getBoundsInParent().getCenterX());
-        System.out.println(larghezzaReale);
+//        System.out.println(larghezzaReale);
         double nuovaPosX = macchina.getLayoutX() + speed;
         double limite = mappa.getPrefWidth() - larghezzaReale;
         if (nuovaPosX > limite){
@@ -102,11 +102,10 @@ public class Movimento extends AnimationTimer {
         macchina.setLayoutX(nuovaPosX);
     }
 
-    /*
+    //todo gestire immagini con collisioni
     public void collisione(){
-        Collisioni collisione = new Collisioni(new Rectangle(macchina.getFitWidth(),macchina.getFitHeight(), 200,350));
+        Collisioni collisione = new Collisioni(new Rectangle(macchina.getX(),macchina.getY(), macchina.getFitWidth(),macchina.getFitHeight()));
         System.out.println("Bordo superiore: " + collisione.getBordoSuperiore());
     }
-     */
 
 }
