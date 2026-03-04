@@ -8,6 +8,7 @@ import javafx.scene.shape.Rectangle;
  */
 public class Collisioni {
     private Rectangle ostacolo;
+    Bounds coordinate;
     public Collisioni(Rectangle ostacolo) {
         this.ostacolo = ostacolo;
     }
@@ -17,12 +18,39 @@ public class Collisioni {
      * @return il valore del bordo superiore
      */
     public double getBordoSuperiore(){
-        Bounds coordinate = ostacolo.getBoundsInParent();
+        coordinate = ostacolo.getBoundsInParent();
         double bordoSuperiore = coordinate.getMinY();
         return bordoSuperiore;
     }
 
-//    public double getBordoInferiore(){
-//
-//    }
+    /**
+     * prende il valore del bordo inferiore
+     * @return il valore del bordo inferiore
+     */
+    public double getBordoInferiore(){
+        coordinate = ostacolo.getBoundsInParent();
+        double bordoInferiore = coordinate.getMaxY();
+        return bordoInferiore;
+    }
+
+    /**
+     * prende il valore del bordo destro
+     * @return il valore del bordo destro
+     */
+    public double getBordoDestro(){
+        coordinate = ostacolo.getBoundsInParent();
+        double bordoDestro = coordinate.getMaxX();
+        return bordoDestro;
+    }
+
+    /**
+     * prende il valore del bordo sinistro
+     * @return il valore del bordo sinistro
+     */
+    public double getBordoSinistro(){
+        coordinate = ostacolo.getBoundsInParent();
+        double bordoSinistro = coordinate.getMinX();
+        return bordoSinistro;
+    }
+
 }
