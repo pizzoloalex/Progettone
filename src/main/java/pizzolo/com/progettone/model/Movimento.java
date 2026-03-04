@@ -7,6 +7,8 @@ import javafx.animation.Timeline;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
 import pizzolo.com.progettone.controller.Controller;
 
@@ -80,7 +82,11 @@ public class Movimento extends AnimationTimer {
         System.out.println(larghezzaReale);
         double nuovaPosX = macchina.getLayoutX() + speed;
         double limite = mappa.getPrefWidth() - larghezzaReale;
-        if (nuovaPosX > limite) nuovaPosX = limite;
+        if (nuovaPosX > limite){
+//            collisione();
+//            this.speed = 2;
+            nuovaPosX = limite;
+        }
         macchina.setLayoutX(nuovaPosX);
     }
 
@@ -96,5 +102,11 @@ public class Movimento extends AnimationTimer {
         macchina.setLayoutX(nuovaPosX);
     }
 
+    /*
+    public void collisione(){
+        Collisioni collisione = new Collisioni(new Rectangle(macchina.getFitWidth(),macchina.getFitHeight(), 200,350));
+        System.out.println("Bordo superiore: " + collisione.getBordoSuperiore());
+    }
+     */
 
 }
