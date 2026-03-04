@@ -76,8 +76,10 @@ public class Movimento extends AnimationTimer {
     private void turnRight() {
         double speed = 5;
         double larghezzaReale = macchina.getBoundsInParent().getWidth();
+//        System.out.println(macchina.getBoundsInParent().getCenterX());
+        System.out.println(larghezzaReale);
         double nuovaPosX = macchina.getLayoutX() + speed;
-        double limite = mappa.getPrefWidth() - larghezzaReale; // 225 - 150 = 75
+        double limite = mappa.getPrefWidth() - larghezzaReale;
         if (nuovaPosX > limite) nuovaPosX = limite;
         macchina.setLayoutX(nuovaPosX);
     }

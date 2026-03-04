@@ -66,10 +66,6 @@ public class Controller {
     double centro;
 
 
-//    Rectangle r;
-//
-//    Rectangle r2;
-
 
     //TODO pulire eventuale codice
     /**
@@ -105,12 +101,10 @@ public class Controller {
         Image img_macchina = new Image(getClass().getResource("/pizzolo/com/progettone/images/macchina.png").toExternalForm());
         macchina.setImage(img_macchina);
         double centroMacchina = (mappa.getPrefWidth() - macchina.getFitWidth()) / 2;
+        macchina.setFitWidth(img_macchina.getWidth());
         macchina.setLayoutX(centroMacchina);
         macchina.setLayoutY(mappa.getPrefHeight() - macchina.getFitHeight() - 20);
 
-//        double v = img_1.getView().getFitWidth();
-//        r = new Rectangle(centro-(v/2), 0, v, mappa.getHeight());
-//        r2 = new Rectangle(centroMacchina - (v/2), 0, macchina.getFitWidth(), macchina.getFitHeight());
 
         Mappa[] immagini = {img_1, img_2, img_3, img_4};
         move = new Movimento(mappa, immagini, macchina, this);
@@ -143,7 +137,6 @@ public class Controller {
             case D, RIGHT -> rightPressed = true;
             default -> System.out.println("Testo non valido!!");
         }
-//        move.setMove(collisioni());
     }
 
     /**
@@ -159,10 +152,5 @@ public class Controller {
             default -> System.out.println("Tasto non valido!!");
         }
     }
-
-//    public boolean collisioni(){
-//        return r.getBoundsInParent().intersects(r2.getBoundsInParent());
-//    }
-
 
 }
