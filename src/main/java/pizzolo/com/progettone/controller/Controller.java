@@ -64,7 +64,12 @@ public class Controller {
 
     double centro;
 
+//Modo per lavorare le collisioni visivamente NO logica
 
+    //TODO Strategia
+    // TODO Posizionare collisione_macchina.png in posizioni X casuali sulle immagini della strada
+    // TODO Rilevare la collisione usando BoundsInParent tra macchina e ostacoli
+    //TODO Fermare il gioco quando avviene la collisione
     //TODO aggiungere al immagini alla strada per le collisioni
     /*
     per le collisioni inserisco l'immagine della collisione singola posizionando la macchine in determinate posizioni.
@@ -82,7 +87,7 @@ public class Controller {
         img_2 = new Mappa(1, "/pizzolo/com/progettone/images/continuo_strada.png");
         img_3 = new Mappa(2, "/pizzolo/com/progettone/images/continuo_strada.png");
         img_4 = new Mappa(3, "/pizzolo/com/progettone/images/continuo_strada.png");
-        collisione = new Mappa(4,"/pizzolo/com/progettone/images/collisione_macchina.jpg");
+//        collisione = new Mappa(4,"/pizzolo/com/progettone/images/collisione_macchina.png");
 
         //posiziona le immagini una sotto l'altra
         img_1.getView().setLayoutY(0);

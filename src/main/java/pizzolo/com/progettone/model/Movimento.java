@@ -26,19 +26,13 @@ public class Movimento extends AnimationTimer {
     private Timeline accelerazione;//accelerazione per la macchina
     private ImageView macchina;
     private Controller controller;
-//    boolean move;
 
     public Movimento(Pane mappa, Mappa[] immagini, ImageView macchina, Controller controller) {
         this.mappa = mappa;
         this.immagini = immagini;
         this.macchina = macchina;
         this.controller = controller;
-//        move = true;
     }
-//
-//    public void setMove(boolean move) {
-//        this.move = move;
-//    }
 
     /**
      * gestisce i movimenti della macchina ad ogni frame
