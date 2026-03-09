@@ -2,12 +2,15 @@ package pizzolo.com.progettone.controller;
 
 
 import javafx.fxml.FXML;
+import javafx.geometry.Bounds;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.shape.Rectangle;
+import pizzolo.com.progettone.model.Collisioni;
 import pizzolo.com.progettone.model.Mappa;
 import pizzolo.com.progettone.model.Movimento;
 
@@ -27,8 +30,6 @@ import java.util.Map;
 
 
 public class Controller {
-//    @FXML
-//    private VBox vBox;
     @FXML
     private StackPane schermo;//mostra tutto il gioco
     @FXML
@@ -41,14 +42,14 @@ public class Controller {
     private Mappa img_2;
     private Mappa img_3;
     private Mappa img_4;
-    private Mappa collisione;
     //variabile del movimento
     private Movimento move;
     //variabili per la gestione dei click
     private boolean leftPressed = false;
     private boolean rightPressed = false;
     private boolean upPressed = false;
-
+    private Rectangle contMacchina;
+//    private Collisioni collisione;
 
     public boolean isRightPressed() {
         return rightPressed;
@@ -62,21 +63,19 @@ public class Controller {
         return upPressed;
     }
 
+
+
     double centro;
 
-//Modo per lavorare le collisioni visivamente NO logica
 
-    //TODO Strategia
-    // TODO Posizionare collisione_macchina.png in posizioni X casuali sulle immagini della strada
-    // TODO Rilevare la collisione usando BoundsInParent tra macchina e ostacoli
-    //TODO Fermare il gioco quando avviene la collisione
-    //TODO aggiungere al immagini alla strada per le collisioni
     /*
-    per le collisioni inserisco l'immagine della collisione singola posizionando la macchine in determinate posizioni.
-    rimpicciolendo la macchina, mettendo piu immagini della stessa sequenza.
-    tagliare l.immagine e rimuovere lo sfondo
+     Posizionare collisione_macchina.png in posizioni X casuali sulle immagini della strada
+     Rilevare la collisione usando BoundsInParent tra macchina e ostacoli
+     Fermare il gioco quando avviene la collisione
+     aggiungere al immagini alla strada per le collisioni
+     pulire eventuale codice
      */
-    //TODO pulire eventuale codice
+
     /**
      * crea le immagini iniziali
      * gestisce il layot delle immagini
@@ -87,7 +86,6 @@ public class Controller {
         img_2 = new Mappa(1, "/pizzolo/com/progettone/images/continuo_strada.png");
         img_3 = new Mappa(2, "/pizzolo/com/progettone/images/continuo_strada.png");
         img_4 = new Mappa(3, "/pizzolo/com/progettone/images/continuo_strada.png");
-//        collisione = new Mappa(4,"/pizzolo/com/progettone/images/collisione_macchina.png");
 
         //posiziona le immagini una sotto l'altra
         img_1.getView().setLayoutY(0);
@@ -113,7 +111,8 @@ public class Controller {
         macchina.setFitWidth(img_macchina.getWidth());
         macchina.setLayoutX(centroMacchina);
         macchina.setLayoutY(mappa.getPrefHeight() - macchina.getFitHeight() - 20);
-
+        //posiziona il rettangolo nella macchina
+        contMacchina = new Rectangle(centroMacchina, macchina.getLayoutY(), macchina.getFitWidth(), macchina.getFitHeight());
 
         Mappa[] immagini = {img_1, img_2, img_3, img_4};
         move = new Movimento(mappa, immagini, macchina, this);
@@ -126,6 +125,10 @@ public class Controller {
                 newScene.setOnKeyReleased(this::movimentoOnKeyRelased);
             }
         });
+    }
+
+    public Bounds getBoundsMacchina() {
+        return macchina.getBoundsInParent(); // si aggiorna automaticamente
     }
 
     /**

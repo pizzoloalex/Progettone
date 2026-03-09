@@ -4,6 +4,7 @@ import javafx.animation.Animation;
 import javafx.animation.AnimationTimer;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.geometry.Bounds;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
@@ -12,20 +13,23 @@ import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
 import pizzolo.com.progettone.controller.Controller;
 
+import javax.swing.*;
+
 /**
  * gestisce i movimenti della macchina
  */
 
-    //TODO gestire collisioni
+//TODO gestire collisioni
 
 public class Movimento extends AnimationTimer {
 
-    private double speed = 6;
+    private double speedBase = 6;
     private final Pane mappa;
     private Mappa[] immagini;
     private Timeline accelerazione;//accelerazione per la macchina
     private ImageView macchina;
     private Controller controller;
+    private double speed = speedBase;
 
     public Movimento(Pane mappa, Mappa[] immagini, ImageView macchina, Controller controller) {
         this.mappa = mappa;
@@ -37,6 +41,7 @@ public class Movimento extends AnimationTimer {
     /**
      * gestisce i movimenti della macchina ad ogni frame
      * quando un immagine esce dal inquadraura (Pane) viene messa sotto
+     *
      * @param l
      */
     @Override
@@ -54,13 +59,18 @@ public class Movimento extends AnimationTimer {
         //movimento continuo e fluido
         if (controller.isLeftPressed()) turnLeft();
         if (controller.isRightPressed()) turnRight();
+
+        collisione();
     }
 
     /**
      * ogni 15 secondi la velocita aumenta
      */
     public void accelera() {
-        accelerazione = new Timeline(new KeyFrame(Duration.seconds(15), actionEvent -> this.speed++));
+        accelerazione = new Timeline(new KeyFrame(Duration.seconds(15), actionEvent -> {
+            this.speedBase += 5;
+        }
+        ));
         accelerazione.setCycleCount(Animation.INDEFINITE);
         accelerazione.play();
     }
@@ -76,11 +86,10 @@ public class Movimento extends AnimationTimer {
 //        System.out.println(larghezzaReale);
         double nuovaPosX = macchina.getLayoutX() + speed;
         double limite = mappa.getPrefWidth() - larghezzaReale;
-        if (nuovaPosX > limite){
-//            collisione();
-//            this.speed = 2;
+        if (nuovaPosX > limite) {
             nuovaPosX = limite;
         }
+//        collisione();
         macchina.setLayoutX(nuovaPosX);
     }
 
@@ -96,10 +105,40 @@ public class Movimento extends AnimationTimer {
         macchina.setLayoutX(nuovaPosX);
     }
 
-    //todo gestire immagini con collisioni
-    public void collisione(){
-        Collisioni collisione = new Collisioni(new Rectangle(macchina.getX(),macchina.getY(), macchina.getFitWidth(),macchina.getFitHeight()));
-        System.out.println("Bordo superiore: " + collisione.getBordoSuperiore());
+    /**
+     * @return bordo sinistro della strada
+     */
+    private double getBordoSinistroStrada() {
+        return immagini[0].getView().getLayoutX();
     }
+
+    /**
+     * @return il bordo destro della strada
+     */
+    private double getBordoDestroStrada() {
+        return immagini[0].getView().getLayoutX() + immagini[0].getView().getFitWidth();
+    }
+
+    /**
+     * decrementa velocita se tocca bordo
+     * aumenta velocita se torna in strada
+     */
+    public void collisione() {
+        Bounds macchina = controller.getBoundsMacchina();
+        double bordoSx = getBordoSinistroStrada();
+        double bordoDx = getBordoDestroStrada();
+
+        double tolleranza = 10; // pixel di margine dai bordi
+
+        boolean vicinoBordo = macchina.getMinX() < bordoSx + tolleranza ||
+                macchina.getMaxX() > bordoDx - tolleranza;
+
+        if (vicinoBordo) {
+            speed = Math.max(1, speed * 0.95);
+        } else {
+            speed = Math.min(speedBase, speed + 0.05);
+        }
+    }
+    //todo gestire immagini con collisioni
 
 }
