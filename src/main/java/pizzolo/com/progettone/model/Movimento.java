@@ -11,6 +11,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
+import org.w3c.dom.css.Rect;
 import pizzolo.com.progettone.controller.Controller;
 
 import javax.swing.*;
@@ -23,13 +24,14 @@ import javax.swing.*;
 
 public class Movimento extends AnimationTimer {
 
-    private double speedBase = 6;
+    private double speed = 6;
     private final Pane mappa;
-    private Mappa[] immagini;
+    private final Mappa[] immagini;
     private Timeline accelerazione;//accelerazione per la macchina
-    private ImageView macchina;
-    private Controller controller;
-    private double speed = speedBase;
+    private final ImageView macchina;
+    private final Controller controller;
+    private Collisioni collisione;
+    private Rectangle rect;
 
     public Movimento(Pane mappa, Mappa[] immagini, ImageView macchina, Controller controller) {
         this.mappa = mappa;
@@ -54,13 +56,19 @@ public class Movimento extends AnimationTimer {
                 img.getView().setLayoutY(img.getView().getLayoutY() - img.getView().getFitHeight() * immagini.length);
             }
         }
-
-//        if(!move) return;
-        //movimento continuo e fluido
+        //posiziona il rettangolo
+        for (Rectangle rect : controller.getOstacoli()) {
+            rect.setY(rect.getY() + speed);
+            // quando esce dallo schermo, riportalo sopra
+            if (rect.getY() >= mappa.getHeight()) {
+                rect.setY(rect.getY() - immagini[0].getView().getFitHeight() * immagini.length); // torna sopra
+            }
+        }
         if (controller.isLeftPressed()) turnLeft();
         if (controller.isRightPressed()) turnRight();
 
         collisione();
+
     }
 
     /**
@@ -68,9 +76,8 @@ public class Movimento extends AnimationTimer {
      */
     public void accelera() {
         accelerazione = new Timeline(new KeyFrame(Duration.seconds(15), actionEvent -> {
-            this.speedBase += 5;
-        }
-        ));
+            this.speed += 5;
+        }));
         accelerazione.setCycleCount(Animation.INDEFINITE);
         accelerazione.play();
     }
@@ -82,14 +89,11 @@ public class Movimento extends AnimationTimer {
     private void turnRight() {
         double speed = 5;
         double larghezzaReale = macchina.getBoundsInParent().getWidth();
-//        System.out.println(macchina.getBoundsInParent().getCenterX());
-//        System.out.println(larghezzaReale);
         double nuovaPosX = macchina.getLayoutX() + speed;
         double limite = mappa.getPrefWidth() - larghezzaReale;
         if (nuovaPosX > limite) {
             nuovaPosX = limite;
         }
-//        collisione();
         macchina.setLayoutX(nuovaPosX);
     }
 
@@ -105,40 +109,19 @@ public class Movimento extends AnimationTimer {
         macchina.setLayoutX(nuovaPosX);
     }
 
-    /**
-     * @return bordo sinistro della strada
-     */
-    private double getBordoSinistroStrada() {
-        return immagini[0].getView().getLayoutX();
-    }
-
-    /**
-     * @return il bordo destro della strada
-     */
-    private double getBordoDestroStrada() {
-        return immagini[0].getView().getLayoutX() + immagini[0].getView().getFitWidth();
-    }
-
-    /**
-     * decrementa velocita se tocca bordo
-     * aumenta velocita se torna in strada
-     */
-    public void collisione() {
-        Bounds macchina = controller.getBoundsMacchina();
-        double bordoSx = getBordoSinistroStrada();
-        double bordoDx = getBordoDestroStrada();
-
-        double tolleranza = 10; // pixel di margine dai bordi
-
-        boolean vicinoBordo = macchina.getMinX() < bordoSx + tolleranza ||
-                macchina.getMaxX() > bordoDx - tolleranza;
-
-        if (vicinoBordo) {
-            speed = Math.max(1, speed * 0.95);
-        } else {
-            speed = Math.min(speedBase, speed + 0.05);
-        }
-    }
     //todo gestire immagini con collisioni
 
+    /**
+     * gestisce la collisione della macchina controllando i bordi
+     */
+    public void collisione() {
+        for (Rectangle rect : controller.getOstacoli()) {
+            if (macchina.getBoundsInParent().intersects(rect.getBoundsInParent())) {
+                System.out.println("Collisione rilevata");
+                this.stop();
+            }
+        }
+    }
 }
+
+

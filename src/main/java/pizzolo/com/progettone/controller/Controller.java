@@ -9,25 +9,21 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import org.w3c.dom.css.Rect;
 import pizzolo.com.progettone.model.Collisioni;
 import pizzolo.com.progettone.model.Mappa;
 import pizzolo.com.progettone.model.Movimento;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 /**
  * la mappa si muove e si aggiorna ad ogni movimento della macchina
  * la macchina sta ferma e fa gli effetti per far sembrare che si muove
  */
-
-
-
-
-//TODO inserire immagine di collisione e aggiungerlo nel array
-//TODO scrivere meglio il codice
-
-
 
 public class Controller {
     @FXML
@@ -48,8 +44,16 @@ public class Controller {
     private boolean leftPressed = false;
     private boolean rightPressed = false;
     private boolean upPressed = false;
+    //variabili per collisioni
     private Rectangle contMacchina;
-//    private Collisioni collisione;
+    private Rectangle rectangle;
+    private List<Rectangle> ostacoli;
+    Rectangle r1, r2, r3;
+
+
+    public List<Rectangle> getOstacoli() {
+        return ostacoli;
+    }
 
     public boolean isRightPressed() {
         return rightPressed;
@@ -59,16 +63,8 @@ public class Controller {
         return leftPressed;
     }
 
-    public boolean isUpPressed() {
-        return upPressed;
-    }
-
-
-
     double centro;
-
     //TODO fixare metodo rallentamento,  permettere alla macchina di uscire un po dalla strada. per poi gestiree graficamente il contorno della strada
-
 
     /*
      Posizionare collisione_macchina.png in posizioni X casuali sulle immagini della strada
@@ -83,6 +79,8 @@ public class Controller {
      * gestisce il layot delle immagini
      */
     public void initialize() {
+
+        ostacoli = new ArrayList<>();
         //creazione delle immagini iniziali
         img_1 = new Mappa(0, "/pizzolo/com/progettone/images/continuo_strada.png");
         img_2 = new Mappa(1, "/pizzolo/com/progettone/images/continuo_strada.png");
@@ -103,8 +101,22 @@ public class Controller {
 
         //imposta la larghezza del pane quanto la larghezza del immagine
         mappa.setPrefWidth(img_1.getView().getFitWidth());
+        rectangle = new Rectangle(80, 50, img_3.getView().getFitWidth() - 150, 100);
+        rectangle.setFill(Color.rgb(255, 0, 0, 0.3)); // rosso semitrasparente
+        rectangle.setStroke(Color.RED);
+        rectangle.setStrokeWidth(2);
         mappa.getChildren().addAll(img_1.getView(), img_2.getView(), img_3.getView(), img_4.getView());
         macchina.toFront();
+
+
+        //gestione ostacoli
+        r1 = new Rectangle(20, 300, 80, 80);
+        r2 = new Rectangle(100, -400, 80, 80);
+        ostacoli.add(r1);
+        ostacoli.add(r2);
+        ostacoli.add(rectangle);
+        mappa.getChildren().addAll(r1, r2, rectangle);
+
 
         //inserisco macchina
         Image img_macchina = new Image(getClass().getResource("/pizzolo/com/progettone/images/macchina.png").toExternalForm());
@@ -129,6 +141,9 @@ public class Controller {
         });
     }
 
+    /**
+     * @return tutti i bordi della macchina
+     */
     public Bounds getBoundsMacchina() {
         return macchina.getBoundsInParent(); // si aggiorna automaticamente
     }
@@ -138,6 +153,7 @@ public class Controller {
      * W = avanti, una volta partito non si ferma, tranne allo scontro
      * A = sinstra
      * D = destra
+     *
      * @param event input della tastiera
      */
     public void movimentoOnKeyPressed(KeyEvent event) {
@@ -155,6 +171,7 @@ public class Controller {
 
     /**
      * gestisce il rilascio dei tasti
+     *
      * @param event rilascio del tasto premuto
      */
     public void movimentoOnKeyRelased(KeyEvent event) {
