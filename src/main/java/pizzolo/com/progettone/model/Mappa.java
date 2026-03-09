@@ -13,20 +13,22 @@ public class Mappa {
     private Image strada;
     private ImageView view;
 
-    public Mappa(int id, String urlImg)  {
+    public Mappa(int id, String urlImg) {
         this.id = id;
         loadImages(urlImg, id);
     }
+
     /**
      * ogni id e per distinguere le immagini
+     *
      * @param url del immagine
-     * @param id di ogni immagine diversa
+     * @param id  di ogni immagine diversa
      */
-    private void loadImages(String url, int id)  {
+    private void loadImages(String url, int id) {
         this.id = id;
-        if (url == "" || url == null){
+        if (url == "" || url == null) {
             System.out.println("Percorso non valido");
-        }else{
+        } else {
             this.strada = new Image(getClass().getResource(url).toExternalForm());
             this.view = new ImageView(this.strada);
             //TODO sistemare dimensioni delle immagini che sia automatica

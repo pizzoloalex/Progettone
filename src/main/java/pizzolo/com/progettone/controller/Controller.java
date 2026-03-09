@@ -8,17 +8,13 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
-import org.w3c.dom.css.Rect;
-import pizzolo.com.progettone.model.Collisioni;
 import pizzolo.com.progettone.model.Mappa;
 import pizzolo.com.progettone.model.Movimento;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 /**
  * la mappa si muove e si aggiorna ad ogni movimento della macchina
@@ -48,7 +44,7 @@ public class Controller {
     private Rectangle contMacchina;
     private Rectangle rectangle;
     private List<Rectangle> ostacoli;
-    Rectangle r1, r2, r3;
+    Rectangle r1, r2;
 
 
     public List<Rectangle> getOstacoli() {
@@ -139,13 +135,6 @@ public class Controller {
                 newScene.setOnKeyReleased(this::movimentoOnKeyRelased);
             }
         });
-    }
-
-    /**
-     * @return tutti i bordi della macchina
-     */
-    public Bounds getBoundsMacchina() {
-        return macchina.getBoundsInParent(); // si aggiorna automaticamente
     }
 
     /**
