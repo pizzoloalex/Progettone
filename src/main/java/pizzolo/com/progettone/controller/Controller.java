@@ -67,6 +67,8 @@ public class Controller {
 
     double centro;
 
+    //TODO fixare metodo rallentamento, permettere alla macchina di uscire un po dalla strada. per poi gestiree graficamente il contorno della strada
+
 
     /*
      Posizionare collisione_macchina.png in posizioni X casuali sulle immagini della strada
