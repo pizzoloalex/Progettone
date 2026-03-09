@@ -67,7 +67,7 @@ public class Controller {
 
     double centro;
 
-    //TODO fixare metodo rallentamento, permettere alla macchina di uscire un po dalla strada. per poi gestiree graficamente il contorno della strada
+    //TODO fixare metodo rallentamento,  permettere alla macchina di uscire un po dalla strada. per poi gestiree graficamente il contorno della strada
 
 
     /*
