@@ -4,6 +4,7 @@ import javafx.animation.Animation;
 import javafx.animation.AnimationTimer;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Rectangle;
@@ -20,7 +21,7 @@ import javax.swing.*;
 
 public class Movimento extends AnimationTimer {
 
-    private double speed = 6;
+    private double speed = 2;
     private final Pane mappa;
     private final Mappa[] immagini;
     private final ImageView macchina;
@@ -50,7 +51,7 @@ public class Movimento extends AnimationTimer {
             }
         }
         //posiziona il rettangolo
-        for (Rectangle rect : controller.getOstacoli()) {
+        for (ImageView rect : controller.getOstacoli()) {
             rect.setY(rect.getY() + speed);
             // quando esce dallo schermo, riportalo sopra
             if (rect.getY() >= mappa.getHeight()) {
@@ -72,6 +73,8 @@ public class Movimento extends AnimationTimer {
         Timeline accelerazione = new Timeline(new KeyFrame(Duration.seconds(10), actionEvent -> this.speed++));
         accelerazione.setCycleCount(Animation.INDEFINITE);
         accelerazione.play();
+
+        riposizioneOstacoli();
     }
 
     /**
@@ -107,13 +110,25 @@ public class Movimento extends AnimationTimer {
      * gestisce la collisione della macchina controllando i bordi
      */
     public void collisione() {
-        for (Rectangle rect : controller.getOstacoli()) {
+        for (ImageView rect : controller.getOstacoli()) {
             if (macchina.getBoundsInParent().intersects(rect.getBoundsInParent())) {
                 System.out.println("Collisione rilevata");
                 this.stop();
-                return;
             }
         }
+    }
+
+    public void riposizioneOstacoli() {
+        Timeline riposiziona = new Timeline(new KeyFrame(Duration.seconds(5), e -> {
+            Collisioni c = new Collisioni(controller);
+            for (ImageView ostacolo : controller.getOstacoli()) {
+                ostacolo.setLayoutX(c.controlloPosizione()[0]);
+                ostacolo.setLayoutY(c.controlloPosizione()[1]);
+            }
+        }));
+        riposiziona.setCycleCount(Animation.INDEFINITE);
+        riposiziona.play();
+        collisione();
     }
 }
 
