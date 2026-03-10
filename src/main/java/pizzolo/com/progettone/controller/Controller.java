@@ -10,6 +10,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import pizzolo.com.progettone.model.Collisioni;
 import pizzolo.com.progettone.model.Mappa;
 import pizzolo.com.progettone.model.Movimento;
 
@@ -43,13 +44,28 @@ public class Controller {
     //variabili per collisioni
     private Rectangle contMacchina;
     private Rectangle rectangle;
-    private List<Rectangle> ostacoli;
-    Rectangle r1, r2;
+    private List<ImageView> ostacoli;
+    private Rectangle r1, r2;
+    private ImageView ostacolo;
+    private Mappa[] immagini;
+//    public Mappa[] getImmagini() {
+//        return immagini;
+//    }
 
+    public ImageView getOstacolo() {
+        return ostacolo;
+    }
 
-    public List<Rectangle> getOstacoli() {
+    public List<ImageView> getOstacoli() {
         return ostacoli;
     }
+
+    public Mappa getImg_1() {
+        return img_1;
+    }
+
+
+    //TODO risolvere bug degli ostacoli e controllare bug della velocita
 
     public boolean isRightPressed() {
         return rightPressed;
@@ -60,7 +76,6 @@ public class Controller {
     }
 
     double centro;
-    //TODO fixare metodo rallentamento,  permettere alla macchina di uscire un po dalla strada. per poi gestiree graficamente il contorno della strada
 
     /*
      Posizionare collisione_macchina.png in posizioni X casuali sulle immagini della strada
@@ -97,21 +112,34 @@ public class Controller {
 
         //imposta la larghezza del pane quanto la larghezza del immagine
         mappa.setPrefWidth(img_1.getView().getFitWidth());
+        /*
         rectangle = new Rectangle(80, 50, img_3.getView().getFitWidth() - 150, 100);
         rectangle.setFill(Color.rgb(255, 0, 0, 0.3)); // rosso semitrasparente
         rectangle.setStroke(Color.RED);
         rectangle.setStrokeWidth(2);
+         */
         mappa.getChildren().addAll(img_1.getView(), img_2.getView(), img_3.getView(), img_4.getView());
         macchina.toFront();
 
+        immagini = new Mappa[]{img_1, img_2, img_3, img_4};
 
         //gestione ostacoli
-        r1 = new Rectangle(20, 300, 80, 80);
-        r2 = new Rectangle(100, -400, 80, 80);
-        ostacoli.add(r1);
-        ostacoli.add(r2);
-        ostacoli.add(rectangle);
-        mappa.getChildren().addAll(r1, r2, rectangle);
+        Collisioni c = new Collisioni(this);
+        for (int i = 0; i < 10; i++) {
+
+            ostacolo = new ImageView(getClass().getResource("/pizzolo/com/progettone/images/collisione_macchina.png").toExternalForm());
+            //grandezza ostacoli
+            ostacolo.setFitWidth(75);
+            ostacolo.setFitHeight(macchina.getFitHeight());
+            ostacoli.add(ostacolo);
+
+            double[] pos = c.controlloPosizione();
+
+            ostacolo.setLayoutX(pos[0]);
+            ostacolo.setLayoutY(pos[1]);
+            //aggiungo l'ostacolo alla lisra e lo posiziono dentro la strada
+        }
+        mappa.getChildren().addAll(ostacoli);
 
 
         //inserisco macchina
@@ -124,7 +152,6 @@ public class Controller {
         //posiziona il rettangolo nella macchina
         contMacchina = new Rectangle(centroMacchina, macchina.getLayoutY(), macchina.getFitWidth(), macchina.getFitHeight());
 
-        Mappa[] immagini = {img_1, img_2, img_3, img_4};
         move = new Movimento(mappa, immagini, macchina, this);
 
 
@@ -173,4 +200,7 @@ public class Controller {
         }
     }
 
+    public Mappa getImg_4() {
+        return img_4;
+    }
 }
